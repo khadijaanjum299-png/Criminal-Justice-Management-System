@@ -1,0 +1,119 @@
+{
+  "theme": "light",
+  "archetype": "4 (Swiss & High-Contrast)",
+  "vibe": "Authority, clarity, functional beauty, technical precision, objective.",
+  "typography": {
+    "heading_font": "Chivo",
+    "body_font": "IBM Plex Sans",
+    "scales": {
+      "h1": "text-4xl sm:text-5xl lg:text-5xl font-black tracking-tight leading-none",
+      "h2": "text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight leading-none",
+      "h3": "text-xl sm:text-2xl font-bold tracking-tight",
+      "h4": "text-lg sm:text-xl font-semibold",
+      "body": "text-sm sm:text-base leading-relaxed text-slate-700",
+      "small_labels": "text-xs font-semibold uppercase tracking-[0.2em] text-slate-500"
+    }
+  },
+  "colors": {
+    "background_primary": "#FFFFFF",
+    "background_secondary": "#F3F4F6",
+    "surface": "#FFFFFF",
+    "surface_hover": "#F8F9FA",
+    "border_subtle": "rgba(0, 0, 0, 0.08)",
+    "border_strong": "rgba(0, 0, 0, 1)",
+    "text_primary": "#0A0A0A",
+    "text_secondary": "#4B5563",
+    "text_tertiary": "#9CA3AF",
+    "accent_primary": "#0033A0",
+    "accent_primary_hover": "#002370",
+    "accent_danger": "#D92D20",
+    "accent_warning": "#FDB022",
+    "accent_success": "#12B76A"
+  },
+  "spacing_and_layout": {
+    "philosophy": "High density, control room grid layout. Every pixel utilized. Priority to scanability and functional density.",
+    "container_padding": "p-4 sm:p-6 lg:p-8",
+    "grid_system": {
+      "base": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4",
+      "gap": "gap-4 md:gap-6",
+      "bento_ratios": {
+        "summary_widget": "col-span-1",
+        "chart_primary": "col-span-2 row-span-2 md:col-span-3",
+        "feed_list": "col-span-1 row-span-2"
+      }
+    },
+    "borders": {
+      "radius": "rounded-sm md:rounded",
+      "style": "border border-slate-200"
+    },
+    "surface_strategy": "Grid Borders (Technical Look). Expose the skeleton. Minimal shadow, relying on 1px solid strokes for structure."
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#0033A0] text-white hover:bg-[#002370] rounded font-semibold transition-colors duration-200 px-4 py-2",
+      "secondary": "bg-white text-[#0A0A0A] border border-slate-300 hover:bg-slate-50 hover:text-[#0033A0] rounded font-medium transition-colors duration-200 px-4 py-2",
+      "danger": "bg-[#D92D20] text-white hover:bg-[#B42318] rounded font-semibold transition-colors duration-200 px-4 py-2"
+    },
+    "cards": {
+      "style": "bg-white border border-slate-200 rounded-sm shadow-sm",
+      "hover": "hover:shadow-md hover:border-slate-300 transition-shadow duration-200"
+    },
+    "inputs": {
+      "style": "border border-slate-300 rounded-sm bg-white focus:ring-2 focus:ring-[#0033A0] focus:border-transparent text-sm",
+      "labels": "text-xs font-semibold uppercase tracking-[0.1em] text-slate-600 mb-1 block"
+    },
+    "tables": {
+      "style": "w-full text-sm text-left border-collapse",
+      "header": "bg-slate-50 text-xs font-semibold uppercase tracking-[0.1em] text-slate-500 border-b border-slate-200 py-3 px-4",
+      "row": "border-b border-slate-100 hover:bg-slate-50 transition-colors py-3 px-4"
+    },
+    "badges": {
+      "high_risk": "bg-red-50 text-[#D92D20] border border-red-200 rounded px-2 py-1 text-xs font-medium",
+      "medium_risk": "bg-yellow-50 text-[#FDB022] border border-yellow-200 rounded px-2 py-1 text-xs font-medium",
+      "low_risk": "bg-green-50 text-[#12B76A] border border-green-200 rounded px-2 py-1 text-xs font-medium"
+    },
+    "data_visualizations": {
+      "library": "recharts",
+      "style": "Use precise, thin lines. Tooltips should be technical, minimal padding, sharp edges. Grid lines must be subtle."
+    }
+  },
+  "motion": {
+    "hover_states": "Quick and responsive. 0.15s ease-in-out.",
+    "page_transitions": "Minimal. Fade in only. Use framer-motion for micro-interactions on data update, but keep it sterile and fast.",
+    "charts": "Animate on load. Smooth growing lines or bars."
+  },
+  "icons": {
+    "library": "@phosphor-icons/react",
+    "style": "Duotone or Regular weight. Must look technical and professional.",
+    "installation": "yarn add @phosphor-icons/react"
+  },
+  "media": {
+    "image_urls": {
+      "login_background": {
+        "url": "https://images.unsplash.com/photo-1765046255517-412341954c4c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwyfHxkYXRhJTIwbmV0d29yayUyMHdoaXRlJTIwYmFja2dyb3VuZHxlbnwwfHx8fDE3NzcwNDA2MjV8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract white wavy surface with grid pattern. Use for login background and overarching app textured backgrounds."
+      },
+      "forensic_abstract": {
+        "url": "https://images.unsplash.com/photo-1759265212078-520b362f2920?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NDh8MHwxfHNlYXJjaHwzfHxmaW5nZXJwcmludCUyMGFic3RyYWN0JTIwZGlnaXRhbHxlbnwwfHx8fDE3NzcwNDA2MTV8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Abstract swirling patterns with concentric circles (fingerprint like). Use in digital forensics reports or blockchain audit view hero sections."
+      },
+      "government_badge": {
+        "url": "https://images.pexels.com/photos/18136799/pexels-photo-18136799.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Close-up of a government/police badge. Use as a placeholder for the official department logo in headers or sidebars."
+      }
+    }
+  },
+  "accessibility": {
+    "testing_attributes": "All interactive and key informational elements MUST include `data-testid` attribute (e.g., data-testid='fir-submit-button').",
+    "contrast": "Ensure minimum 4.5:1 ratio for normal text. Use #0A0A0A for primary text on white."
+  },
+  "instructions_to_main_agent": [
+    "Install `lucide-react` or `@phosphor-icons/react` for technical, dense dashboards.",
+    "Use standard Shadcn components, but customize border-radius to be minimal (rounded-sm) and rely on 1px solid subtle borders.",
+    "Ensure the layout mimics a high-tech control room—highly dense, grid-based, using a 12-column or 4-column system.",
+    "Do NOT use gradients or soft colorful shadows. Rely on raw, structural CSS.",
+    "Implement simulated blockchain ledger visually using Recharts or a custom chronological card list mimicking chain blocks.",
+    "For analytics, use Recharts with colors strictly mapped to the functional color palette (#0033A0, #D92D20, #FDB022, #12B76A).",
+    "All navigation must be visible on the left sidebar for dashboard views, avoiding desktop hamburger menus."
+  ]
+}
