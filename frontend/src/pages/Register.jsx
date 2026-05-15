@@ -39,38 +39,38 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen login-hero flex items-center justify-center p-6">
-      <div className="w-full max-w-xl bg-white border border-slate-200 rounded-sm p-8 shadow-sm">
-        <div className="micro-label mb-2">Create Account</div>
-        <h2 className="font-display text-3xl font-black tracking-tight mb-1">Register</h2>
-        <p className="text-sm text-slate-600 mb-6">
+    <div className="min-h-screen login-hero flex items-center justify-center p-6 bg-[#0B1120]">
+      <div className="w-full max-w-xl bg-slate-900/60 border border-cyan-500/20 rounded-3xl p-8 shadow-[0_0_30px_rgba(6,182,212,0.2)] backdrop-blur-sm neon-glow">
+        <div className="micro-label mb-2 text-cyan-300/80">Create Account</div>
+        <h2 className="font-display text-3xl font-black tracking-tight mb-1 text-slate-100">Register</h2>
+        <p className="text-sm text-slate-400 mb-6">
           Citizens register directly. Officials require admin approval after registration.
         </p>
 
         <form onSubmit={submit} className="grid grid-cols-2 gap-4">
           <div className="col-span-2">
-            <label className="micro-label">Full Name</label>
+            <label className="micro-label text-slate-300">Full Name</label>
             <input
               data-testid="reg-name"
               required
               value={f.name}
               onChange={(e) => update("name", e.target.value)}
-              className="w-full border border-slate-300 px-3 py-2.5 text-sm rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0033A0]"
+              className="w-full border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm text-white rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
             />
           </div>
           <div>
-            <label className="micro-label">Email</label>
+            <label className="micro-label text-slate-300">Email</label>
             <input
               data-testid="reg-email"
               type="email"
               required
               value={f.email}
               onChange={(e) => update("email", e.target.value)}
-              className="w-full border border-slate-300 px-3 py-2.5 text-sm rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0033A0]"
+              className="w-full border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm text-white rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
             />
           </div>
           <div>
-            <label className="micro-label">Password</label>
+            <label className="micro-label text-slate-300">Password</label>
             <input
               data-testid="reg-password"
               type="password"
@@ -78,60 +78,63 @@ export default function Register() {
               minLength={6}
               value={f.password}
               onChange={(e) => update("password", e.target.value)}
-              className="w-full border border-slate-300 px-3 py-2.5 text-sm rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0033A0]"
+              className="w-full border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm text-white rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
             />
           </div>
           <div>
-            <label className="micro-label">CNIC / National ID</label>
+            <label className="micro-label text-slate-300">CNIC / National ID</label>
             <input
               data-testid="reg-cnic"
               value={f.cnic}
               onChange={(e) => update("cnic", e.target.value)}
-              className="w-full border border-slate-300 px-3 py-2.5 text-sm rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0033A0]"
+              className="w-full border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm text-white rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
               placeholder="XXXXX-XXXXXXX-X"
             />
           </div>
           <div>
-            <label className="micro-label">Phone</label>
+            <label className="micro-label text-slate-300">Phone</label>
             <input
               data-testid="reg-phone"
               value={f.phone}
               onChange={(e) => update("phone", e.target.value)}
-              className="w-full border border-slate-300 px-3 py-2.5 text-sm rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-[#0033A0]"
+              className="w-full border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm text-white rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
             />
           </div>
           <div className="col-span-2">
-            <label className="micro-label">Role</label>
+            <label className="micro-label text-slate-300">Role</label>
             <select
               data-testid="reg-role"
               value={f.role}
               onChange={(e) => update("role", e.target.value)}
-              className="w-full border border-slate-300 px-3 py-2.5 text-sm rounded-sm mt-1 bg-white focus:outline-none focus:ring-2 focus:ring-[#0033A0]"
+              className="w-full border border-slate-700 bg-slate-900/50 px-3 py-2.5 text-sm text-white rounded-sm mt-1 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
             >
               <option value="citizen">Citizen</option>
               <option value="police">Police Officer</option>
               <option value="forensic">Forensic Expert</option>
+              <option value="investigator">Investigator</option>
+              <option value="court_officer">Court Officer</option>
+              <option value="judge">Judge</option>
             </select>
           </div>
 
           {err && (
             <div
               data-testid="reg-error"
-              className="col-span-2 text-xs text-[#D92D20] bg-red-50 border border-red-200 px-3 py-2 rounded-sm"
+              className="col-span-2 text-xs text-red-200 bg-[#3f1d24] border border-red-700 px-3 py-2 rounded-sm"
             >
               {err}
             </div>
           )}
 
           <div className="col-span-2 flex items-center justify-between gap-4 mt-2">
-            <Link to="/login" className="text-sm text-slate-600 hover:text-[#0033A0]">
+            <Link to="/login" className="text-sm text-cyan-400 hover:text-cyan-300">
               ← Already registered? Sign in
             </Link>
             <button
               data-testid="reg-submit"
               type="submit"
               disabled={loading}
-              className="bg-[#0033A0] text-white px-5 py-2.5 text-sm font-semibold rounded-sm hover:bg-[#002370] disabled:opacity-60 transition-colors flex items-center gap-2"
+              className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white px-5 py-2.5 text-sm font-semibold rounded-sm hover:shadow-[0_0_15px_rgba(6,182,212,0.5)] disabled:opacity-60 transition-all flex items-center gap-2"
             >
               <UserPlus size={16} />
               {loading ? "Registering…" : "Create Account"}

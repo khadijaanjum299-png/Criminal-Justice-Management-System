@@ -76,6 +76,35 @@ def test_me_citizen(citizen_sess):
     assert r.json()["role"] == "citizen"
 
 
+def test_register_assigns_wallet_id():
+    s = _session()
+    payload = {
+        "email": f"wallet_{int(time.time())}@test.com",
+        "password": "Wallet@123",
+        "name": "Wallet User",
+        "role": "citizen",
+    }
+    r = s.post(f"{API}/auth/register", json=payload, timeout=30)
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert "wallet_id" in d
+    assert isinstance(d["wallet_id"], str)
+    assert len(d["wallet_id"]) == 64
+
+
+def test_get_user_wallet_matches_me(citizen_sess):
+    me = citizen_sess.get(f"{API}/auth/me", timeout=30)
+    assert me.status_code == 200, me.text
+    me_wallet = me.json().get("wallet_id")
+    assert me_wallet
+
+    r = citizen_sess.get(f"{API}/user/wallet", timeout=30)
+    assert r.status_code == 200, r.text
+    d = r.json()
+    assert d["wallet_id"] == me_wallet
+    assert len(d["wallet_id"]) == 64
+
+
 # ---------- FIR ----------
 def test_fir_create_citizen(citizen_sess):
     r = citizen_sess.post(f"{API}/firs", json={
@@ -152,9 +181,25 @@ def test_evidence_upload(police_sess):
     assert r.status_code == 200, r.text
     d = r.json()
     assert d["evidence_id"].startswith("EVD-")
+    assert "cid" in d
+    assert d["file_name"] == "ev.txt"
+    assert d["file_type"] == "text/plain"
+    assert "timestamp" in d
     state["evidence_id"] = d["evidence_id"]
     state["stored_filename"] = d["stored_filename"]
     state["original_hash"] = d["sha256_hash"]
+
+
+def test_ipfs_upload_endpoint(police_sess):
+    content = b"ipfs-only-upload-" + os.urandom(8)
+    files = {"file": ("ipfs-test.txt", io.BytesIO(content), "text/plain")}
+    r = police_sess.post(f"{API}/ipfs/upload", files=files, timeout=30)
+    # Compatible with setups where IPFS daemon is not available.
+    assert r.status_code in (200, 502), r.text
+    if r.status_code == 200:
+        d = r.json()
+        assert "cid" in d
+        assert d["file_name"] == "ipfs-test.txt"
 
 
 def test_evidence_verify_ok(police_sess):
@@ -163,6 +208,12 @@ def test_evidence_verify_ok(police_sess):
     d = r.json()
     assert d["ok"] is True
     assert d["current_hash"] == state["original_hash"]
+
+
+def test_evidence_verify_compat_endpoint(police_sess):
+    r = police_sess.get(f"{API}/evidence/verify/{state['evidence_id']}", timeout=30)
+    assert r.status_code == 200
+    assert "ok" in r.json()
 
 
 def test_evidence_tampering():
@@ -198,6 +249,42 @@ def test_forensic_citizen_forbidden(citizen_sess):
     assert r.status_code == 403
 
 
+# ---------- Smart contract validation ----------
+def test_smart_contract_validate_payload_contract(police_sess):
+    payload = {
+        "evidence_id": state["evidence_id"],
+        "approval_count": 2,
+        "hash_value": state["original_hash"],
+    }
+    r = police_sess.post(f"{API}/smart-contract/validate", json=payload, timeout=30)
+    assert r.status_code == 200, r.text
+    d = r.json()
+    for k in ("accepted", "status", "hash_match", "approvals_valid", "provided_approval_count"):
+        assert k in d
+    assert d["provided_approval_count"] == payload["approval_count"]
+
+
+def test_smart_contract_validate_rejects_legacy_field_names(police_sess):
+    legacy_payload = {
+        "evidence_id": state["evidence_id"],
+        "approvals": 2,
+        "sha256_hash": state["original_hash"],
+    }
+    r = police_sess.post(f"{API}/smart-contract/validate", json=legacy_payload, timeout=30)
+    assert r.status_code == 422
+
+
+def test_smart_contract_validate_invalid_hash(police_sess):
+    payload = {
+        "evidence_id": state["evidence_id"],
+        "approval_count": 2,
+        "hash_value": "not-a-valid-sha256",
+    }
+    r = police_sess.post(f"{API}/smart-contract/validate", json=payload, timeout=30)
+    assert r.status_code == 400, r.text
+    assert "Invalid hash" in r.text
+
+
 # ---------- Blockchain ----------
 def test_blockchain_integrity(admin_sess):
     r = admin_sess.get(f"{API}/blockchain", timeout=30)
@@ -207,6 +294,8 @@ def test_blockchain_integrity(admin_sess):
     assert d["count"] >= 3
     # Verify chaining
     blocks = d["blocks"]
+    if blocks:
+        assert "action_type" in blocks[-1]
     for i in range(1, len(blocks)):
         assert blocks[i]["previous_hash"] == blocks[i - 1]["current_hash"]
 
@@ -216,7 +305,7 @@ def test_analytics_stats(admin_sess):
     r = admin_sess.get(f"{API}/analytics/stats", timeout=30)
     assert r.status_code == 200
     d = r.json()
-    for k in ("total_firs", "by_crime_type", "by_location", "by_month"):
+    for k in ("total_firs", "by_crime_type", "by_location", "by_month", "pending_appeals", "total_appeals"):
         assert k in d
 
 

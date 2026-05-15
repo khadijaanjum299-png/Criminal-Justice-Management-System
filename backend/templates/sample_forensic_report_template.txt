@@ -1,0 +1,22 @@
+FORENSIC REPORT TEMPLATE
+
+Case ID:
+FIR ID:
+Examiner Name:
+Lab Name:
+Evidence IDs:
+
+Hash Verification Section:
+
+CID Verification Section:
+
+Chain of Custody Section:
+
+AI Tampering Analysis:
+
+Findings:
+
+Conclusion:
+
+Digital Signature:
+Date & Timestamp:

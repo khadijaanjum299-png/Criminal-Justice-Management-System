@@ -68,7 +68,7 @@ export default function Users() {
           </thead>
           <tbody data-testid="users-rows">
             {list.map((u) => (
-              <tr key={u.id} className="border-b border-slate-100 hover:bg-slate-50">
+              <tr key={u.id} className="border-b border-slate-100 hover-neon">
                 <td className="px-5 py-2.5 font-medium">{u.name}</td>
                 <td className="px-5 py-2.5 font-mono text-xs">{u.email}</td>
                 <td className="px-5 py-2.5">

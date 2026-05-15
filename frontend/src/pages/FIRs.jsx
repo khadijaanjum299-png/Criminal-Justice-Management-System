@@ -1,20 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { api } from "@/lib/api";
+import { useAuth } from "@/context/AuthContext";
 import { Plus, Search } from "lucide-react";
 
 export default function FIRs() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [firs, setFirs] = useState([]);
   const [q, setQ] = useState("");
   useEffect(() => {
     api.get("/firs").then(({ data }) => setFirs(data)).catch(() => {});
   }, []);
-  const filtered = firs.filter(
-    (f) =>
-      f.fir_id.toLowerCase().includes(q.toLowerCase()) ||
-      f.crime_type.toLowerCase().includes(q.toLowerCase()) ||
-      f.location.toLowerCase().includes(q.toLowerCase())
-  );
+  const filtered = firs.filter((f) => {
+    const query = q.trim().toLowerCase();
+    if (!query) return true;
+    return (
+      (f.fir_id || "").toLowerCase().includes(query) ||
+      (f.crime_type || "").toLowerCase().includes(query) ||
+      (f.location || "").toLowerCase().includes(query)
+    );
+  });
 
   return (
     <div className="space-y-6">
@@ -24,13 +30,15 @@ export default function FIRs() {
           <h1 className="font-display text-4xl font-black tracking-tight leading-none">FIRs</h1>
           <p className="text-sm text-slate-600 mt-2">{firs.length} total reports</p>
         </div>
-        <Link
-          to="/firs/new"
-          data-testid="btn-new-fir"
-          className="bg-[#0033A0] text-white px-4 py-2.5 text-sm font-semibold rounded-sm hover:bg-[#002370] flex items-center gap-2"
-        >
-          <Plus size={16} /> New FIR
-        </Link>
+        {user?.role === "citizen" && (
+          <Link
+            to="/firs/new"
+            data-testid="btn-new-fir"
+            className="bg-[#0033A0] text-white px-4 py-2.5 text-sm font-semibold rounded-sm hover:bg-[#002370] flex items-center gap-2"
+          >
+            <Plus size={16} /> New FIR
+          </Link>
+        )}
       </header>
 
       <div className="relative max-w-md">
@@ -67,13 +75,15 @@ export default function FIRs() {
               filtered.map((f) => (
                 <tr
                   key={f.fir_id}
-                  className="border-b border-slate-100 hover-row hover:bg-slate-50 cursor-pointer"
+                  className="border-b border-slate-100 hover-row hover-neon cursor-pointer"
+                  onClick={() => navigate(`/firs/${f.fir_id}`)}
                 >
                   <td className="px-5 py-3 font-mono text-xs">
                     <Link
                       to={`/firs/${f.fir_id}`}
                       data-testid={`fir-link-${f.fir_id}`}
                       className="text-[#0033A0] hover:underline"
+                      onClick={(evt) => evt.stopPropagation()}
                     >
                       {f.fir_id}
                     </Link>
@@ -83,7 +93,7 @@ export default function FIRs() {
                   <td className="px-5 py-3 text-slate-600">{f.location}</td>
                   <td className="px-5 py-3">
                     <span className="inline-block px-2 py-0.5 text-[10px] font-semibold uppercase bg-slate-100 border border-slate-200 rounded-sm">
-                      {f.status}
+                      {f.display_status || (f.status?.toLowerCase() === "closed" ? "CASE CLOSED" : f.status)}
                     </span>
                   </td>
                   <td className="px-5 py-3 text-xs text-slate-500 font-mono">

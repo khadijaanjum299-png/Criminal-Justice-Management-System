@@ -1,0 +1,3 @@
+backend:
+.\venv\Scripts\Activate.ps1
+uvicorn server:app --reload

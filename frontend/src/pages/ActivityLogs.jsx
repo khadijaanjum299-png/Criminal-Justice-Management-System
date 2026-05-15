@@ -27,7 +27,7 @@ export default function ActivityLogs() {
           </thead>
           <tbody data-testid="activity-rows">
             {logs.map((l) => (
-              <tr key={l.id} className="border-b border-slate-100 hover:bg-slate-50">
+              <tr key={l.id} className="border-b border-slate-100 hover-neon">
                 <td className="px-5 py-2.5 font-mono text-xs text-slate-600">{l.timestamp?.slice(0, 19).replace("T", " ")}</td>
                 <td className="px-5 py-2.5">{l.user_email}</td>
                 <td className="px-5 py-2.5">
