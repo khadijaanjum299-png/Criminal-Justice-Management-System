@@ -1,9 +1,0 @@
-backend:
-.\venv\Scripts\Activate.ps1
-uvicorn server:app --reload
-
-IPFS:
-
-cd <ipfs path>
-ipfs init
-ipfs daemon
