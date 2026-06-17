@@ -20,10 +20,9 @@ export function getIpfsViewUrl(cid, localGatewayUrl) {
   if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
     return trimmed;
   }
-  if (localGatewayUrl) {
-    return `${String(localGatewayUrl).replace(/\/$/, "")}/${trimmed}`;
-  }
-  return `https://ipfs.io/ipfs/${trimmed}`;
+  // Default to local gateway if no localGatewayUrl provided
+  const gateway = localGatewayUrl || "http://127.0.0.1:8080/ipfs";
+  return `${String(gateway).replace(/\/$/, "")}/${trimmed}`;
 }
 
 export async function openIpfsUrl(cid, localGatewayUrl) {
@@ -41,6 +40,22 @@ export async function openIpfsUrl(cid, localGatewayUrl) {
     }
     throw new Error("IPFS content temporarily unavailable");
   } catch (error) {
-    return { ok: false, url, error: error?.message || "IPFS content temporarily unavailable" };
+    // If local gateway fails, try fallback to ipfs.io
+    if (url.includes("127.0.0.1:8080")) {
+      const fallbackUrl = `https://ipfs.io/ipfs/${String(cid).trim()}`;
+      try {
+        const fallbackResponse = await fetch(fallbackUrl, {
+          method: "HEAD",
+          cache: "no-store",
+        });
+        if (fallbackResponse.type === "opaque" || fallbackResponse.ok) {
+          window.open(fallbackUrl, "_blank");
+          return { ok: true, url: fallbackUrl, usingFallback: true };
+        }
+      } catch (fallbackError) {
+        // Both failed
+      }
+    }
+    return { ok: false, url, error: "IPFS daemon not running locally. Please start IPFS daemon to view content." };
   }
 }

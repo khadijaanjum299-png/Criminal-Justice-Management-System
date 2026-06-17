@@ -1,4 +1,4 @@
-# Step 1: Build the app (like baking a cake)
+# Build stage
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY package*.json ./
@@ -6,8 +6,14 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Step 2: Serve the baked cake (show it to visitors)
+# Production stage
 FROM nginx:alpine
+RUN apk add --no-cache gettext
+
 COPY --from=builder /app/build /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-EXPOSE 80
+
+# Copy as template — nginx image auto-substitutes env vars
+COPY nginx.conf /etc/nginx/templates/default.conf.template
+
+EXPOSE 8080
+CMD ["nginx", "-g", "daemon off;"]

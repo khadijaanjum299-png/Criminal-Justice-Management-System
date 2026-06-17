@@ -40,6 +40,7 @@ export default function FIRDetail() {
   const [verifyHash, setVerifyHash] = useState("");
   const [verifyCID, setVerifyCID] = useState("");
   const [verificationResult, setVerificationResult] = useState(null);
+  const [ipfsStatus, setIpfsStatus] = useState({ connected: false, status: "Unknown", gateway_url: "http://127.0.0.1:8080/ipfs" });
 
   const load = async () => {
     try {
