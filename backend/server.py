@@ -1,3 +1,19 @@
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+# ADD THIS ↓↓↓
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "https://crime-management-system.up.railway.app",  # your frontend
+        "http://localhost:3000",  # for local testing
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],  # allow all methods: GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],  # allow all headers
+)
 from dotenv import load_dotenv
 from pathlib import Path
 ROOT_DIR = Path(__file__).parent
@@ -28,7 +44,6 @@ from fastapi import FastAPI, APIRouter, Request, Response, HTTPException, Depend
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from contextlib import asynccontextmanager
-from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, Field, EmailStr
 
@@ -4955,7 +4970,6 @@ async def lifespan(app: FastAPI):
     # Shutdown
     client.close()
 
-app = FastAPI(title="AI Criminal Case Management System", lifespan=lifespan)
 
 # ---------------- Middleware & mount ----------------
 app.include_router(api)
@@ -5013,12 +5027,5 @@ frontend_url = os.environ.get("FRONTEND_URL", "").strip()
 if frontend_url and frontend_url not in cors_origins:
     cors_origins.append(frontend_url)
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 logging.basicConfig(level=logging.INFO)
